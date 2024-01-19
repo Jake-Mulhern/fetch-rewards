@@ -22,5 +22,5 @@ RUN chmod +x /app/docker-entrypoint.sh
 # Create a directory for the SQLite database
 RUN mkdir /db
 
-# Specify the entrypoint script to run when the container starts
+# Specify the entrypoint script to run when the container starts.
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
