@@ -1,9 +1,9 @@
 # fetch-rewards-processor
 
-BUILDING:
+## BUILDING:
 
 1. Start Docker on your local machine
-2. Inside of the directory where you'd like this program to live run the following
+2. Inside of the directory where you'd like this program to live run the following command
 ```
 git clone git@github.com:Jake-Mulhern/fetch-rewards.git
 ```
@@ -16,6 +16,8 @@ git clone git@github.com:Jake-Mulhern/fetch-rewards.git
 
 TESTING:
 1. Send the following in JSON format to the endpoint http://localhost:8000/receipts/process
+You can send this to the endpoint in any manner that works for you.  I will give detailed instructions
+on testing using curl below
 ```
 {
   "retailer": "M&M Corner Market",
@@ -40,64 +42,40 @@ TESTING:
 }
 ```
 
-*This can be accomplished with httpie
-Installing and testing with httpie on mac using homebrew
-1. $ brew update
-2. $ brew install httpie
-3. $ echo '{
-  "retailer": "M&M Corner Market",
-  "purchaseDate": "2022-03-20",
-  "purchaseTime": "14:33",
-  "items": [
-    {
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    }
-  ],
-  "total": "9.00"
-}' | http POST http://localhost:8000/receipts/process
-4. This should return {"id": 1}
-5. In the browser, visit http://localhost:8000/receipts/1/process
-6. This should display {"points":109}
 
-Installing and testing with httpie on windows using Chocolatey
-1. Open Command Prompt as Administrator.
-2. Install Chocolatey if you haven't done so already. You can do this by running the following command:
-```
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+### This can be accomplished with curl
 
+## Testing with curl
+
+### Testing first endpoint
 ```
-3. $ choco install httpie
-4. $ echo '{
-  "retailer": "M&M Corner Market",
-  "purchaseDate": "2022-03-20",
-  "purchaseTime": "14:33",
-  "items": [
-    {
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    },{
-      "shortDescription": "Gatorade",
-      "price": "2.25"
-    }
-  ],
-  "total": "9.00"
-}' | http POST http://localhost:8000/receipts/process
-5. This should return {"id": 1}
-6. In the browser, visit http://localhost:8000/receipts/1/process
-7. This should display {"points":109}
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "retailer": "M&M Corner Market",
+    "purchaseDate": "2022-03-20",
+    "purchaseTime": "14:33",
+    "items": [
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      }
+    ],
+    "total": "9.00"
+  }' \
+  http://localhost:8000/receipts/process
+```
+
+### Testing Second Endpoint
+```
+curl -X GET http://localhost:8000/receipts/1/points
+```

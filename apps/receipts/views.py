@@ -5,9 +5,11 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import Http404
 
-from .utils import sum_points
 from .serializers import ReceiptSerializer, ItemSerializer
 from .models import Receipt
+
+from .utils import sum_points
+
 
 class ReceiptProcess(APIView):
     """
@@ -31,7 +33,6 @@ class ReceiptProcess(APIView):
                     return Response({"id": new_receipt.pk}, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print('error processing: ', e)
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -47,14 +48,12 @@ class ReceiptPoints(APIView):
         try:
             return Receipt.objects.get(pk=pk)
         except Receipt.DoesNotExist:
-            raise Http404
+            return Response({"message": "Receipt does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request, pk):
         try:
             receipt = self.get_object(pk)
-            print('receipt: ', receipt)
             points = sum_points(receipt, receipt.item_set.all())
-            print("points: ", points)
             return Response({"points": points}, status=status.HTTP_200_OK)
         except receipt.DoesNotExist:
             return Response({"message": "Receipt does not exist"}, status=status.HTTP_400_BAD_REQUEST)
