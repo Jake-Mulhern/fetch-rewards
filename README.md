@@ -8,9 +8,10 @@ BUILDING:
 git clone git@github.com:Jake-Mulhern/fetch-rewards.git
 ```
 3. $ cd fetch-rewards
-4. Create a new .env file and add the variables from example.env
-5. Please get the SECRET_KEY value from someone within the organization
-6. $ docker-compose up
+4. $ touch .env
+5. Add the variables from example.env
+6. Please get the SECRET_KEY value from someone within the organization
+7. $ docker-compose up
 
 
 TESTING:
