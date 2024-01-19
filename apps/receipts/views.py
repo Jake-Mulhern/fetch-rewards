@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 
 from .serializers import ReceiptSerializer, ItemSerializer
 from .models import Receipt
@@ -47,7 +48,7 @@ class ReceiptPoints(APIView):
     def get_object(self, pk):
         try:
             return Receipt.objects.get(pk=pk)
-        except Receipt.DoesNotExist:
+        except ObjectDoesNotExist:
             return Response({"message": "Receipt does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request, pk):
