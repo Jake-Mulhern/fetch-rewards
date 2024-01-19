@@ -58,7 +58,7 @@ class ReceiptPoints(APIView):
             receipt = self.get_object(pk)
             points = sum_points(receipt, receipt.item_set.all())
             return Response({"points": points}, status=status.HTTP_200_OK)
-        except receipt.DoesNotExist:
+        except NotFound:
             return Response({"message": "Receipt does not exist"}, status=status.HTTP_400_BAD_REQUEST)
         except Exception:
             return Response({"message": "Something went wrong.  Please try again."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
