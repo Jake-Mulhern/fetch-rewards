@@ -13,10 +13,14 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application into the image
 COPY . /app/
 
+# Add the entrypoint script
+ADD docker-entrypoint.sh /app/
+
+# Make the entrypoint script executable
+RUN chmod +x /app/docker-entrypoint.sh
+
 # Create a directory for the SQLite database
 RUN mkdir /db
 
-# Specify the command to run when the container starts
-CMD ["sh", "-c", "python manage.py makemigrations && \
-                python manage.py migrate && \
-                python manage.py runserver 0.0.0.0:8000"]
+# Specify the entrypoint script to run when the container starts
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
