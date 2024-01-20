@@ -4,9 +4,17 @@
 
 1. Start Docker on your local machine
 2. Inside of the directory where you'd like this program to live run the following command
+
+For Mac & Ubuntu
 ```
 git clone git@github.com:Jake-Mulhern/fetch-rewards.git
 ```
+
+For Windows
+```
+git clone git@github.com:Jake-Mulhern/fetch-rewards.git --config core.autocrlf=false
+```
+
 3. $ cd fetch-rewards
 4. $ touch .env
 5. Add the variables from example.env
@@ -45,7 +53,7 @@ on testing using curl below
 
 ### This can be accomplished with curl
 
-## Testing with curl
+## Testing with curl on Mac & Ubuntu
 
 ### Testing first endpoint
 ```
@@ -78,4 +86,40 @@ curl -X POST \
 ### Testing Second Endpoint
 ```
 curl -X GET http://localhost:8000/receipts/1/points
+```
+
+
+
+## Testing on Windows
+
+### Testing first endpoint
+```
+$jsonData = '{
+    "retailer": "M&M Corner Market",
+    "purchaseDate": "2022-03-20",
+    "purchaseTime": "14:33",
+    "items": [
+      {
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      },{
+        "shortDescription": "Gatorade",
+        "price": "2.25"
+      }
+    ],
+    "total": "9.00"
+  }'
+
+Invoke-RestMethod -Uri "http://localhost:8000/receipts/process" -Method Post -Body $jsonData -ContentType 'application/json'
+```
+
+### Testing Second Endpoint
+```
+Invoke-WebRequest -Uri "http://localhost:8000/receipts/1/points" -Method Get
 ```
