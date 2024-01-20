@@ -4,20 +4,15 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.exceptions import NotFound
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
-
 
 from .serializers import ReceiptSerializer, ItemSerializer
 from .models import Receipt
 
-from .utils import sum_points
-
 
 class ReceiptProcess(APIView):
     """
-    Creates a new Receipt and associated Items.
-    Returns newly created Receipt's pk.
+    Submits a receipt for processing
     """
     parser_classes = [JSONParser]
     renderer_classes = [JSONRenderer]
@@ -33,7 +28,7 @@ class ReceiptProcess(APIView):
                 item_serializer = ItemSerializer(data=items, many=True)
                 if item_serializer.is_valid():
                     item_serializer.save()
-                    return Response({"id": new_receipt.pk}, status=status.HTTP_201_CREATED)
+                    return Response({"id": new_receipt.pk}, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -56,7 +51,7 @@ class ReceiptPoints(APIView):
     def get(self, request, pk):
         try:
             receipt = self.get_object(pk)
-            points = sum_points(receipt, receipt.item_set.all())
+            points = receipt.points()
             return Response({"points": points}, status=status.HTTP_200_OK)
         except NotFound:
             return Response({"message": "Receipt does not exist"}, status=status.HTTP_400_BAD_REQUEST)

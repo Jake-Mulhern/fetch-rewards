@@ -17,14 +17,14 @@ class Receipt(models.Model):
     
     @property
     def total(self):
-        total = 0;
+        total = 0
         for item in self.item_set.all():
             total += item.price
 
         return total
 
     def points(self):
-        return sum_points(self)
+        return sum_points(self, self.item_set.all())
 
 
 class Item(models.Model):
