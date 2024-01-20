@@ -51,7 +51,6 @@ on testing using curl below
 ```
 
 
-### This can be accomplished with curl
 
 ## Testing with curl on Mac & Ubuntu
 
